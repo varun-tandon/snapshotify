@@ -15,7 +15,15 @@ module.exports = async ({ paths, root, config }) => {
     .filter(l => !enqueued.includes(l))   // Ensure we haven't seen it before
     .map(l => { enqueued.push(l); return l; }); // Remember, and return
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--single-process'
+    ]
+  });
 
   const queue = cq().limit({ concurrency: 10 }).process(async path => {
     console.log("Processing", path);
