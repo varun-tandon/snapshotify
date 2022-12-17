@@ -18,6 +18,7 @@ module.exports = async ({ paths, root, config }) => {
   const browser = await puppeteer.launch();
 
   const queue = cq().limit({ concurrency: 10 }).process(async path => {
+    console.log("Processing", path);
     try {
       const { markup, links, lint } = await processPath({ browser, path, config });
       completed.push({ path, markup, lint });
