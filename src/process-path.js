@@ -30,8 +30,9 @@ const minifierOptions = {
 const wrapScripts = str => `window.addEventListener('load', function(){${str}});`;
 
 module.exports = async ({ browser, path, config }) => {
+  console.log("Opening browser page");
   const page = await browser.newPage();
-
+  console.log("Page opened");
   page.evaluateOnNewDocument(() => {
     window.SNAPSHOT = true; // eslint-disable-line no-undef
   });
@@ -39,7 +40,7 @@ module.exports = async ({ browser, path, config }) => {
   await page.setBypassCSP(true);
   await page.goto(path);
   await delay(50);
-
+  console.log("Navigated to page");
   if(config.printConsoleLogs) {
     page.on('console', msg => {
       for (let i = 0; i < msg.args.length; ++i) {
